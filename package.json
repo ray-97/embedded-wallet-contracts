@@ -33,6 +33,7 @@
     "solidity-coverage": "^0.8.4"
   },
   "dependencies": {
+    "@nomicfoundation/hardhat-foundry": "^1.1.2",
     "@oasisprotocol/sapphire-contracts": "^0.2.4",
     "@openzeppelin/contracts": "^5.0.0",
     "@openzeppelin/contracts-upgradeable": "^5.0.0",

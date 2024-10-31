@@ -2,6 +2,7 @@ import '@oasisprotocol/sapphire-hardhat';
 import { HardhatUserConfig } from "hardhat/config";
 import "@nomicfoundation/hardhat-toolbox";
 import "@nomicfoundation/hardhat-ethers";
+import "@nomicfoundation/hardhat-foundry";
 
 const { privateKeyMainnet, privateKeyTestnet, polygonAmoyRPC } = require("./secrets.json");
 
