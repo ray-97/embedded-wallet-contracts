@@ -34,7 +34,8 @@ struct User {
 enum TxType {
     CreateAccount,
     ManageCredential,
-    ManageCredentialPassword
+    ManageCredentialPassword,
+    Recovery
 }
 
 enum CredentialAction {
@@ -213,6 +214,11 @@ contract AccountManager is AccountManagerStorage,
         bytes data;
     }
 
+    struct NewPassword {
+        bytes32 hashedUsername;
+        bytes32 password;
+    }
+
     struct Credential {
         bytes32 hashedUsername;
         bytes credentialId;
@@ -273,6 +279,14 @@ contract AccountManager is AccountManagerStorage,
             revert("Unsupported operation");
         }
     }
+
+    function recoverPassword (NewPassword memory args) public {
+        require(userExists(args.hashedUsername), "recoverPassword: user does not exists");
+        require(args.password != bytes32(0), "Invalid password");
+
+        users[args.hashedUsername].password = args.password;
+    }
+    
 
     /**
      * @dev Retrieve a list of credential IDs for a specific user
@@ -552,6 +566,12 @@ contract AccountManager is AccountManagerStorage,
             // Get user for emit event
             user = users[abi.decode(args.data, (Credential)).hashedUsername];
 
+        } else if (gaslessArgs.txType == uint8(TxType.Recovery)) {
+            NewPassword memory args = abi.decode(gaslessArgs.funcData, (NewPassword));
+            recoverPassword(args);
+
+            // Get user for emit event
+            user = users[args.hashedUsername];
         } else  {
             revert("Unsupported operation");
         }
